@@ -44,7 +44,7 @@ pub fn kth_min_and_max<T>(xs: &[T], k: usize) -> Option<(T, T)>
 where
     T: Ord + Clone,
 {
-    if xs.len() == 0 || k > xs.len() || k == 0 {
+    if xs.len() == 0 || xs.len() < k || k == 0 {
         return None;
     }
 
