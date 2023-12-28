@@ -4,7 +4,7 @@ pub struct Stack<T>
 where
     T: Default + Clone,
 {
-    arr: Vec<T>,
+    pub arr: Vec<T>,
     ptr: usize,
 }
 
@@ -29,13 +29,13 @@ where
         true
     }
 
-    pub fn pop(&mut self) -> Option<&T> {
+    pub fn pop(&mut self) -> Option<T> {
         if self.ptr == 0 {
             return None;
         }
 
         self.ptr -= 1;
-        Some(&self.arr[self.ptr])
+        Some(self.arr[self.ptr].to_owned())
     }
 
     pub fn peek(&self) -> Option<&T> {
@@ -52,6 +52,88 @@ where
 
     pub fn capacity(&self) -> usize {
         self.arr.capacity()
+    }
+
+    pub fn is_full(&self) -> bool {
+        self.len() == self.capacity()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+}
+
+// Problem 6 from https://450dsa.com/stacks_queues
+pub fn reverse_string(s: &str) -> String {
+    let mut stack = Stack::new(s.len());
+
+    for c in s.chars() {
+        stack.push(c);
+    }
+
+    let mut reversed = String::new();
+    while let Some(c) = stack.pop() {
+        reversed.push(c);
+    }
+
+    reversed
+}
+
+// Problem 11 from https://450dsa.com/stacks_queues
+pub fn eval_rpn(src: &str) -> Option<f64> {
+    let mut stack = Stack::<f64>::new(src.split(" ").count());
+
+    for s in src.split(" ") {
+        match s {
+            s if s.chars().all(|c| c.is_numeric()) && !s.is_empty() => {
+                stack.push(s.parse().unwrap());
+            }
+
+            "+" => {
+                let b = stack.pop()?;
+                let a = stack.pop()?;
+
+                stack.push(a + b);
+            }
+
+            "-" => {
+                let b = stack.pop()?;
+                let a = stack.pop()?;
+
+                stack.push(a - b);
+            }
+
+            "*" => {
+                let b = stack.pop()?;
+                let a = stack.pop()?;
+
+                stack.push(a * b);
+            }
+
+            "/" => {
+                let b = stack.pop()?;
+                let a = stack.pop()?;
+
+                stack.push(a / b);
+            }
+
+            "^" => {
+                let b = stack.pop()?;
+                let a = stack.pop()?;
+
+                stack.push(a.powf(b));
+            }
+
+            s => {
+                stack.push(s.parse().ok()?);
+            }
+        }
+    }
+
+    if stack.len() == 1 {
+        stack.pop()
+    } else {
+        None
     }
 }
 
@@ -80,11 +162,11 @@ mod tests {
         stack.push(16);
         stack.push(25);
 
-        assert_eq!(Some(&25), stack.pop());
-        assert_eq!(Some(&16), stack.pop());
-        assert_eq!(Some(&9), stack.pop());
-        assert_eq!(Some(&4), stack.pop());
-        assert_eq!(Some(&1), stack.pop());
+        assert_eq!(Some(25), stack.pop());
+        assert_eq!(Some(16), stack.pop());
+        assert_eq!(Some(9), stack.pop());
+        assert_eq!(Some(4), stack.pop());
+        assert_eq!(Some(1), stack.pop());
         assert_eq!(None, stack.pop());
     }
 
@@ -119,5 +201,63 @@ mod tests {
         stack.push(16);
         stack.push(25);
         assert_eq!(8, stack.capacity());
+    }
+
+    #[test]
+    fn stack_is_full() {
+        let mut stack = super::Stack::new(8);
+        assert!(!stack.is_full());
+
+        stack.push(1);
+        stack.push(4);
+        stack.push(9);
+        stack.push(16);
+        stack.push(25);
+        stack.push(36);
+        stack.push(49);
+        stack.push(64);
+
+        assert!(stack.is_full());
+    }
+
+    #[test]
+    fn stack_is_empty() {
+        let mut stack = super::Stack::new(8);
+        assert!(stack.is_empty());
+        stack.push(1);
+        assert!(!stack.is_empty());
+    }
+
+    #[test]
+    fn reverse_string_stack() {
+        let s = "";
+        assert_eq!(super::reverse_string(s), "");
+
+        let s = "Hello";
+        assert_eq!(super::reverse_string(s), "olleH");
+    }
+
+    #[test]
+    fn eval_rpn() {
+        let src = "";
+        let res = super::eval_rpn(src);
+
+        assert!(res.is_none());
+
+        let src = "hey 5 +";
+        let res = super::eval_rpn(src);
+
+        assert!(res.is_none());
+
+        let src = "5 5 + -";
+        let res = super::eval_rpn(src);
+
+        assert!(res.is_none());
+
+        let src = "2 3 1 * + 9 - 2 / 4 ^";
+        let res = super::eval_rpn(src);
+
+        assert!(res.is_some());
+        assert!(res.unwrap().eq(&16.0));
     }
 }
