@@ -85,10 +85,6 @@ pub fn eval_rpn(src: &str) -> Option<f64> {
 
     for s in src.split(" ") {
         match s {
-            s if s.chars().all(|c| c.is_numeric()) && !s.is_empty() => {
-                stack.push(s.parse().unwrap());
-            }
-
             "+" => {
                 let b = stack.pop()?;
                 let a = stack.pop()?;
