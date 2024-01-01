@@ -15,6 +15,15 @@ pub fn bit_diff(a: u64, b: u64) -> usize {
     count_set_bits(a ^ b)
 }
 
+/// Problem 3 from https://450dsa.com/bit_manipulation
+pub fn count_set_bits_till(n: u64) -> usize {
+    if n == 0 {
+        0
+    } else {
+        (1..=n).map(count_set_bits).sum()
+    }
+}
+
 /// Problem 4 from https://450dsa.com/bit_manipulation
 pub fn is_power_of_two(n: u64) -> bool {
     count_set_bits(n) == 1
@@ -53,6 +62,18 @@ mod tests {
 
         let n = 0b1001;
         assert!(!super::is_power_of_two(n));
+    }
+
+    #[test]
+    fn count_set_bits_till() {
+        let n = 0;
+        assert_eq!(0, super::count_set_bits_till(n));
+
+        let n = 4;
+        assert_eq!(5, super::count_set_bits_till(n));
+
+        let n = 17;
+        assert_eq!(35, super::count_set_bits_till(n));
     }
 
     #[test]
