@@ -74,35 +74,33 @@ mod tests {
     #[test]
     fn min_and_max() {
         let xs = [1, 1, 2, 3, 5, 8, 13, 21];
-        let result = super::min_and_max(&xs);
-        assert!(result.is_some());
-        let (min, max) = result.unwrap();
-        assert_eq!(min, 1);
-        assert_eq!(max, 21);
+        assert_eq!(Some((1, 21)), super::min_and_max(&xs));
 
         let xs: [i32; 0] = [];
-        let result = super::min_and_max(&xs);
-        assert!(result.is_none());
+        assert_eq!(None, super::min_and_max(&xs));
     }
 
     #[test]
     fn kth_min_and_max() {
         let xs = [1, 1, 2, 3, 5, 8, 13, 21];
-        let result = super::kth_min_and_max(&xs, 3);
-        assert!(result.is_some());
-        let (min, max) = result.unwrap();
-        assert_eq!(min, 2);
-        assert_eq!(max, 8);
+        assert_eq!(Some((2, 8)), super::kth_min_and_max(&xs, 3));
 
         let xs = [1, 1, 2, 3, 5, 8, 13, 21];
-        let result1 = super::min_and_max(&xs);
-        assert!(result1.is_some());
-        let result2 = super::kth_min_and_max(&xs, 1);
-        assert!(result2.is_some());
-        assert_eq!(result1.unwrap(), result2.unwrap());
+        assert_eq!(super::min_and_max(&xs), super::kth_min_and_max(&xs, 1));
+
+        let xs = [1, 1, 2, 3, 5, 8, 13, 21];
+        assert_eq!(
+            super::min_and_max(&xs).map(|(min, max)| (max, min)),
+            super::kth_min_and_max(&xs, 8)
+        );
 
         let xs: [i32; 0] = [];
-        let result = super::kth_min_and_max(&xs, 0);
-        assert!(result.is_none());
+        assert_eq!(None, super::kth_min_and_max(&xs, 1));
+
+        let xs = [1, 1, 2, 3, 5, 8, 13, 21];
+        assert_eq!(None, super::kth_min_and_max(&xs, 0));
+
+        let xs = [1, 1, 2, 3, 5, 8, 13, 21];
+        assert_eq!(None, super::kth_min_and_max(&xs, 9))
     }
 }

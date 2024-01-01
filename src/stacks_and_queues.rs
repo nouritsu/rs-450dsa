@@ -227,33 +227,24 @@ mod tests {
     #[test]
     fn reverse_string_stack() {
         let s = "";
-        assert_eq!(super::reverse_string(s), "");
+        assert_eq!("", super::reverse_string(s));
 
         let s = "Hello";
-        assert_eq!(super::reverse_string(s), "olleH");
+        assert_eq!("olleH", super::reverse_string(s));
     }
 
     #[test]
     fn eval_rpn() {
         let src = "";
-        let res = super::eval_rpn(src);
-
-        assert!(res.is_none());
+        assert_eq!(None, super::eval_rpn(src));
 
         let src = "hey 5 +";
-        let res = super::eval_rpn(src);
-
-        assert!(res.is_none());
+        assert_eq!(None, super::eval_rpn(src));
 
         let src = "5 5 + -";
-        let res = super::eval_rpn(src);
-
-        assert!(res.is_none());
+        assert_eq!(None, super::eval_rpn(src));
 
         let src = "2 3 1 * + 9 - 2 / 4 ^";
-        let res = super::eval_rpn(src);
-
-        assert!(res.is_some());
-        assert!(res.unwrap().eq(&16.0));
+        assert_eq!(Some(16.0), super::eval_rpn(src));
     }
 }

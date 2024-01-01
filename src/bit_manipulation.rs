@@ -80,10 +80,10 @@ mod tests {
     #[test]
     fn count_set_bits() {
         let n = 0b1011;
-        assert_eq!(3, super::count_set_bits(n));
+        assert_eq!(super::count_set_bits(n), 3);
 
         let n = 0b0;
-        assert_eq!(0, super::count_set_bits(n));
+        assert_eq!(super::count_set_bits(n), 0);
     }
 
     #[test]
@@ -111,20 +111,23 @@ mod tests {
     fn bit_diff() {
         let a = 0b1001001;
         let b = 0b1111000;
-
-        assert_eq!(super::bit_diff(a, b), 3);
+        assert_eq!(3, super::bit_diff(a, b));
 
         let a = 0b1001001;
         let b = 0b1001001;
-
-        assert_eq!(super::bit_diff(a, b), 0);
+        assert_eq!(0, super::bit_diff(a, b));
     }
 
     #[test]
     fn square() {
-        assert_eq!(super::square(8), 64);
-        assert_eq!(super::square(0), 0);
-        assert_eq!(super::square(-8), 64);
+        let n = 8;
+        assert_eq!(64, super::square(n));
+
+        let n = 0;
+        assert_eq!(0, super::square(n));
+
+        let n = -8;
+        assert_eq!(64, super::square(n));
     }
 
     #[test]

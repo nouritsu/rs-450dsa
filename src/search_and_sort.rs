@@ -17,10 +17,19 @@ pub fn count_squares(until: u64) -> usize {
 mod tests {
     #[test]
     fn count_squares() {
-        assert_eq!(super::count_squares(100), 9);
-        assert_eq!(super::count_squares(9), 2);
-        assert_eq!(super::count_squares(3), 1);
-        assert_eq!(super::count_squares(1), 0);
-        assert_eq!(super::count_squares(0), 0);
+        let n = 100;
+        assert_eq!(9, super::count_squares(n));
+
+        let n = 9;
+        assert_eq!(2, super::count_squares(n));
+
+        let n = 3;
+        assert_eq!(1, super::count_squares(n));
+
+        let n = 1;
+        assert_eq!(0, super::count_squares(n));
+
+        let n = 0;
+        assert_eq!(0, super::count_squares(n));
     }
 }
