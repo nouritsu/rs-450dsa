@@ -31,7 +31,7 @@ pub fn is_power_of_two(n: u64) -> bool {
 
 /// Problem 5 from https://450dsa.com/bit_manipulation
 pub fn bit_position(n: u64) -> Option<usize> {
-    if n == 0 || count_set_bits(n) != 1 {
+    if n == 0 || !is_power_of_two(n) {
         return None;
     }
 
