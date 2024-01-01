@@ -29,6 +29,21 @@ pub fn is_power_of_two(n: u64) -> bool {
     count_set_bits(n) == 1
 }
 
+/// Problem 5 from https://450dsa.com/bit_manipulation
+pub fn bit_position(n: u64) -> Option<usize> {
+    if n == 0 || count_set_bits(n) != 1 {
+        return None;
+    }
+
+    for i in 0.. {
+        if (n >> i) & 0b1 != 0 {
+            return Some(i);
+        }
+    }
+
+    None
+}
+
 /// Problem 8 from https://450dsa.com/bit_manipulation
 pub fn square(mut n: isize) -> usize {
     if n < 0 {
@@ -94,5 +109,20 @@ mod tests {
         assert_eq!(super::square(8), 64);
         assert_eq!(super::square(0), 0);
         assert_eq!(super::square(-8), 64);
+    }
+
+    #[test]
+    fn bit_position() {
+        let n = 0;
+        assert_eq!(None, super::bit_position(n));
+
+        let n = 0b10;
+        assert_eq!(Some(1), super::bit_position(n));
+
+        let n = 0b1000;
+        assert_eq!(Some(3), super::bit_position(n));
+
+        let n = 0b101;
+        assert_eq!(None, super::bit_position(n));
     }
 }
