@@ -44,6 +44,22 @@ pub fn bit_position(n: u64) -> Option<usize> {
     None
 }
 
+/// Problem 7 from https://450dsa.com/bit_manipulation
+pub fn div(mut a: i64, b: i64) -> Option<i64> {
+    if b == 0 {
+        return None;
+    }
+
+    let mut quotient = 0i64;
+    while a >= b {
+        if a - b >= 0 {
+            a -= b;
+            quotient += 1;
+        }
+    }
+    Some(quotient)
+}
+
 /// Problem 8 from https://450dsa.com/bit_manipulation
 pub fn square(mut n: isize) -> usize {
     if n < 0 {
@@ -124,5 +140,20 @@ mod tests {
 
         let n = 0b101;
         assert_eq!(None, super::bit_position(n));
+    }
+
+    #[test]
+    fn div() {
+        let a = 1;
+        let b = 0;
+        assert_eq!(None, super::div(a, b));
+
+        let a = 12;
+        let b = 2;
+        assert_eq!(Some(6), super::div(a, b));
+
+        let a = 5;
+        let b = 10;
+        assert_eq!(Some(0), super::div(a, b))
     }
 }
